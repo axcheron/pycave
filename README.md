@@ -23,7 +23,7 @@ $ pip3 install pefile
 
 ## Install
 
-Checkout the source: `git clone xx`
+Checkout the source: `git clone https://github.com/axcheron/pycave.git`
 
 ## Getting Started
 
