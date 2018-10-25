@@ -38,7 +38,7 @@ def pycave(file_name, cave_size, base):
         print("\n[!] ASLR is enabled. Virtual Address (VA) could be different once loaded in memory.")
 
     fd = open(fname, "rb")
-
+    found = False
     print("\n[+] Looking for code caves...")
     for section in pe.sections:
         if section.SizeOfRawData != 0:
@@ -49,10 +49,11 @@ def pycave(file_name, cave_size, base):
 
             for byte in data:
                 pos += 1
-                if byte == 0x00:
+                if byte == 0x00 or byte == "\x00":
                     count += 1
                 else:
-                    if count > min_cave:
+                    if count >= min_cave:
+                        found = True
                         raw_addr = section.PointerToRawData + pos - count - 1
                         vir_addr = image_base + section.VirtualAddress + pos - count - 1
 
@@ -62,6 +63,8 @@ def pycave(file_name, cave_size, base):
 
     pe.close()
     fd.close()
+    if not found:
+         print("\n[-] Not found any code cave !")
 
 if __name__ == "__main__":
     '''This function parses and return arguments passed in'''
